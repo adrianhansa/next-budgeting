@@ -5,9 +5,10 @@ import { serialize } from "cookie";
 export default async function generateToken(res, statusCode, user) {
   const token = await new jose.SignJWT({
     id: user._id,
-    accessLevel: user.accessLevel,
-    company: user.company,
-    service: user.service,
+    name: user.name,
+    email: user.email,
+    isAdmin: user.isAdmin,
+    household: user.household,
   })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()
@@ -23,8 +24,9 @@ export default async function generateToken(res, statusCode, user) {
   });
   res.status(statusCode).setHeader("Set-Cookie", serialized).json({
     id: user._id,
-    accessLevel: user.accessLevel,
     name: user.name,
-    service: user.service,
+    isAdmin: user.isAdmin,
+    email: user.email,
+    household: user.household,
   });
 }
